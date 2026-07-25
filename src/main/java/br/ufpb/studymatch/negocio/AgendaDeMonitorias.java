@@ -4,6 +4,7 @@ import br.ufpb.studymatch.entidades.Aluno;
 import br.ufpb.studymatch.entidades.SessaoEstudo;
 import br.ufpb.studymatch.excecoes.SessaoJaExisteException;
 import br.ufpb.studymatch.excecoes.SessaoNaoEncontradaException;
+import br.ufpb.studymatch.persistencia.GravadorDeDados;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 public class AgendaDeMonitorias implements ISistemaMonitoria{
 
     private Map<String, SessaoEstudo> sessoes;
+    private GravadorDeDados gravador;
 
     public AgendaDeMonitorias() {
         this.sessoes = new HashMap<>();
+        this.gravador = new GravadorDeDados();
     }
 
     @Override
@@ -79,11 +82,11 @@ public class AgendaDeMonitorias implements ISistemaMonitoria{
 
     @Override
     public void salvarDados() throws IOException {
-
+        this.gravador.salvarDados(this.sessoes);
     }
 
     @Override
     public void recuperarDados() throws IOException {
-
+        this.sessoes = this.gravador.recuperarDados();
     }
 }
